@@ -1,0 +1,25 @@
+volumes:
+  prometheus_data: {}
+
+services:
+  webapp:
+    build:
+      context: ./app
+    container_name: webapp
+    ports:
+      - "5000:5000"
+    expose:
+      - "5000"
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    expose:
+      - "9090"
+    volumes:
+      - ./config/prometheus:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
